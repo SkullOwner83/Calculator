@@ -2,33 +2,33 @@ namespace Calculadora
 {
 	public partial class Calculadora : FormFather
 	{
-		//DeclaraciÛn de variables
+		//Declaraci√≥n de variables
 		double CurrentNumber = 0, LastNumber = 0;
 		bool EndOperation = false;
 		int MaxLenght = 14;
 		char Operator;
 
-		#region Controles de inicializaciÛn
+		#region Controles de inicializaci√≥n
 		//Metodo Constructor
 		public Calculadora()
 		{
 			InitializeComponent();  
         }
 
-		//Cargar y establecer configuraciÛn guardada
+		//Cargar y establecer configuraci√≥n guardada
         private void LoadForm(object sender, EventArgs e)
         {
             tbx_screen.Text = "0";
         }
 		#endregion
         #region Controles de entrada
-        //ComprobaciÛn de pulsado de botones
+        //Comprobaci√≥n de pulsado de botones
         private void ClickButtonFunction(object sender, EventArgs e)
 		{
-			//Guardar el objeto que llamÛ al evento para poder acceder a sus propiedades
+			//Guardar el objeto que llam√≥ al evento para poder acceder a sus propiedades
 			var ButtonPress = ((Button)sender);
 
-			//Comprobar si el boton es numerico o de funciÛn
+			//Comprobar si el boton es numerico o de funci√≥n
 			if (ButtonPress.Text.All(char.IsNumber))
 			{
 				AddNumbersOnScreen(ButtonPress.Text);
@@ -39,12 +39,18 @@ namespace Calculadora
 			}
 		}
 
-		//Metodo de comprobaciÛn de teclas
+		//Metodo de comprobaci√≥n de teclas
 		private void KeyPressFunction(object sender, KeyPressEventArgs e)
         {
 			string KeyPress = Convert.ToString(e.KeyChar), Operation = "";
 
-			//Comprobar si la tecla pulsada es un n˙mero
+			//Borrar un numero en caso de pulsar la tecla retroceso
+			if (e.KeyChar == (char)Keys.Back && tbx_screen.TextLength > 0)
+			{
+				tbx_screen.Text = tbx_screen.Text.Remove(tbx_screen.Text.Length - 1);
+			}
+
+			//Comprobar si la tecla pulsada es un n√∫mero
 			if (KeyPress.All(char.IsNumber))
 			{
 				AddNumbersOnScreen(KeyPress);
@@ -57,20 +63,21 @@ namespace Calculadora
 					case "-": Operation = "btn_subtraction"; break;
 					case "*": Operation = "btn_multiplication"; break;
 					case "/": Operation = "btn_division"; break;
+     					case "c": Operation = "btn_clear"; break;
 				}
 
 				PerformOperation(Operation, KeyPress);
 			}
         }
 		#endregion 
-		#region Controles de funciÛn
-		//Metodo para aÒadir numeros en pantalla
+		#region Controles de funci√≥n
+		//Metodo para a√±adir numeros en pantalla
 		private void AddNumbersOnScreen(string Number)
 		{
-			//Comprobar si aun no se ha igualado la operaciÛn
+			//Comprobar si aun no se ha igualado la operaci√≥n
 			if (EndOperation == false)
 			{
-				//Validar el tamaÒo maximo de digitos
+				//Validar el tama√±o maximo de digitos
 				if (tbx_screen.Text.Length < MaxLenght)
 				{
 					if (tbx_screen.Text == "0")
@@ -82,7 +89,7 @@ namespace Calculadora
 				}
 				else
 				{
-					MessageBox.Show("No es posible introducir m·s de " + MaxLenght + " dÌgitos.");
+					MessageBox.Show("No es posible introducir m√°s de " + MaxLenght + " d√≠gitos.");
 				}
 			}
 			else
@@ -119,14 +126,14 @@ namespace Calculadora
 						case '+': tbx_screen.Text = Convert.ToString(CurrentNumber + LastNumber); break;
 						case '-': tbx_screen.Text = Convert.ToString(CurrentNumber - LastNumber); break;
 						case 'x': tbx_screen.Text = Convert.ToString(CurrentNumber * LastNumber); break;
-						case '˜': tbx_screen.Text = Convert.ToString(CurrentNumber / LastNumber); break;
+						case '√∑': tbx_screen.Text = Convert.ToString(CurrentNumber / LastNumber); break;
 					}
 
 					CurrentNumber = Convert.ToDouble(tbx_screen.Text);
 					EndOperation = true;
 				break;
 
-				//Boton de limpiar operaciÛn
+				//Boton de limpiar operaci√≥n
 				case "btn_clear":
 					tbx_screen.Text = "0";
 					CurrentNumber = 0;
@@ -156,7 +163,7 @@ namespace Calculadora
 					}
 				break;
 
-				//Boton de aÒadir punto decimal
+				//Boton de a√±adir punto decimal
 				case "btn_point":
 					if (!tbx_screen.Text.Contains("."))
 					{
